@@ -3,7 +3,7 @@
 import argparse
 import os
 import numpy as np
-from preprocessing import parse_annotation
+from preprocessing import parse_annotation, parse_csv_annotations
 from frontend import YOLO
 import json
 
@@ -29,15 +29,25 @@ def _main_(args):
     ###############################
 
     # parse annotations of the training set
-    train_imgs, train_labels = parse_annotation(config['train']['train_annot_folder'], 
-                                                config['train']['train_image_folder'], 
-                                                config['model']['labels'])
+    if 'csv' in config['train']['train_annot_folder']:
+        train_imgs, train_labels = parse_csv_annotations(config['train']['train_annot_folder'], 
+                                                    config['train']['train_image_folder'], 
+                                                    config['model']['labels'])
+    else:
+        train_imgs, train_labels = parse_annotation(config['train']['train_annot_folder'], 
+                                                    config['train']['train_image_folder'], 
+                                                    config['model']['labels'])
 
     # parse annotations of the validation set, if any, otherwise split the training set
     if os.path.exists(config['valid']['valid_annot_folder']):
-        valid_imgs, valid_labels = parse_annotation(config['valid']['valid_annot_folder'], 
+        if 'csv' in config['valid']['valid_annot_folder']:
+            valid_imgs, valid_labels = parse_csv_annotations(config['valid']['valid_annot_folder'], 
                                                     config['valid']['valid_image_folder'], 
                                                     config['model']['labels'])
+        else:
+            valid_imgs, valid_labels = parse_annotation(config['valid']['valid_annot_folder'], 
+                                                        config['valid']['valid_image_folder'], 
+                                                        config['model']['labels'])
     else:
         train_valid_split = int(0.8*len(train_imgs))
         np.random.shuffle(train_imgs)

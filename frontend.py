@@ -11,7 +11,9 @@ from keras.layers.merge import concatenate
 from keras.optimizers import SGD, Adam, RMSprop
 from preprocessing import BatchGenerator
 from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
-from backend import TinyYoloFeature, FullYoloFeature, MobileNetFeature, SqueezeNetFeature, Inception3Feature, VGG16Feature, ResNet50Feature
+from backend import TinyYoloFeature, FullYoloFeature, MobileNetFeature, \
+                    SqueezeNetFeature, Inception3Feature, \
+                    VGG16Feature, ResNet50Feature
 
 class YOLO(object):
     def __init__(self, backend,
